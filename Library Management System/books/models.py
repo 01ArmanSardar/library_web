@@ -16,7 +16,7 @@ class Books(models.Model):
     category=models.ManyToManyField(Category)  
     image=models.ImageField(upload_to='upload/',blank=True,null=True) 
     borrowing_price=models.IntegerField()
-    user_reviews=models.TextField()
+    # user_reviews=models.TextField()
 
     def __str__(self):
         return f'{self.title}'
