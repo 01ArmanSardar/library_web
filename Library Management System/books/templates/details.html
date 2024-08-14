@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="col-12 " style="background-color:#E4E4E4;">
+    <div class="card m-2">
+        <div class="card-body">
+            <img style="width: 20%;" src="{{books.image.url}}" class="card-img-top" alt="image" style="width:20%;">
+            <h1 class="card-title">title: {{books.title}}</h1>
+            <p class="card-text">content: {{books.content}}</p>
+            <h4>borrow Price: {{books.borrowing_price}}</h4>
+            <p>Category: {% for cat in books.category.all %}
+                <button class="btn btn-primary btn-sm m-2" disabled>{{cat.name}}</button>
+                {% endfor %}
+            </p>
+            <a class="btn btn-dark" href="{% url 'borrow' books.id %}">borrow</a>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+<div class="container mx-auto">
+    <h3 class="font-bold text-xl my-4">Total Comments: {{comments | length}}</h3>
+    {% for comment in comments %}
+    <div class="my-2 p-2 rounded bg-white">
+        <p class="mb-2">
+            <strong class="font-medium">{{comment.name}}</strong>
+            <small> ({{comment.created_on|date:"jS F Y h:i A"}})</small>
+        </p>
+        <q>{{comment.text}}</q>
+    </div>
+    {% endfor %}
+</div>
+
+{% if 'add_comment' in request.path %}
+<div class="container mx-auto">
+    <h3 class="font-bold text-xl my-4">Leave a comment</h3>
+    <form method="post" novalidate>
+        {% load crispy_forms_tags %}
+        {% csrf_token %}
+        <!-- {{ form | crispy }}-->
+        {% for field in form %}
+        <div>
+            <strong>{{field.label_tag}}</strong>
+        </div>
+        {{field}}
+        <div>
+            <small class="text-red-500">{{field.errors | striptags}}</small>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary my-3 text-black hover:text-white">Add Comment</button>
+    </form>
+</div>
+{% endif %}
+
+{% endblock %}
